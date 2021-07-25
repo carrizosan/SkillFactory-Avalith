@@ -7,18 +7,15 @@ let ordenadoPorCantidadLetras = [];
 let arregloConNuevoColorInicio = [];
 let arregloConNuevoColorFin = [];
 
-/*
-    A partir del arreglo original, obtener los siguientes resultados:
-    - indiceAmarillo: Indice de la ubicacion en el arreglo de 'Amarillo'
-    - cantidadColoresConA: Cuantos colores hay en el arreglo con la letra 'a' (Mayuscula o minuscula)
-    - arregloSinAzul: El arreglo original sin el valor 'Azul'
-    - ordenadoPorCantidadLetras: El arreglo orginal ordenado de forma ascendente por la cantidad de letras en su nombre.
-    - arregloConNuevoColorInicio: El arreglo original con un nuevo color al inicio del mismo.
-    - arregloConNuevoColorFin: El arreglo original con un nuevo color al final del mismo.
+// Resoluciones
+indiceAmarillo = original.findIndex(e => e === 'Amarillo');
+cantidadColoresConA = original.filter(e => e.toLowerCase().includes('a')).length;
+arregloSinAzul = original.filter(e => e !== 'Azul');
+ordenadoPorCantidadLetras = original.sort((a,b) => a.length > b.length ? 1 : -1);
+arregloConNuevoColorInicio = ['Blanco', ...original]; // No utilizo unshift() para no mutar el arreglo original
+arregloConNuevoColorFin = [...original, 'Negro']; // No utilizo push() para no mutar el arreglo original
 
-    Reemplazar este comentario con su codigo.
- */
-
+// Logs
 console.log(indiceAmarillo);
 console.log(cantidadColoresConA);
 console.log(arregloSinAzul);
