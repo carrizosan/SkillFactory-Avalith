@@ -1,17 +1,6 @@
-/*
-    Defina las variables A, B y C de manera que se muestren los siguientes
-    mensajes en consola:
-
-    Valor A
-    "B" no existe!
-    Error al asignar C
-    "C" no existe!
-
-    Solo puedes modificar o eliminar los comentarios marcados con "TODO" como crea necesario.
-*/
 
 try {
-    /* TODO */ A = null;
+    var A = null;
     A = 'Valor A';
 } catch (error) {
     console.log('Error al asignar A');
@@ -24,7 +13,7 @@ try {
 }
 
 try {
-    /* TODO */ B = null;
+    let B = null;
     B = 'Valor B';
 } catch (error) {
     console.log('Error al asignar B');
@@ -37,7 +26,7 @@ try {
 }
 
 try {
-    /* TODO */ C = null;
+    const C = null;
     C = 'Valor C';
 } catch (error) {
     console.log('Error al asignar C');
