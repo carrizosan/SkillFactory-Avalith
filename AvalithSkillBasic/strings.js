@@ -1,3 +1,4 @@
+
 const stringA = 'Rojo,Verde,Amarillo,Azul';
 const stringB = 'Sergio';
 const stringC = 'Damian';
@@ -10,17 +11,18 @@ let fraseOtroNombre = '';
 let posicionNombre = null;
 let arregloParseado = [];
 
-/*
-    A partir de los arreglo originales, obtener los siguientes resultados:
-    - tamanioA: Tamaño del string A
-    - cantidadLetraR: Cuantas letras R (Mayuscula o minuscula) hay en el string A
-    - nombreCompleto: Formar el nombre completo a partir de los strings B y C
-    - fraseOtroNombre: Cambiar el nombre 'Damian' del string D con el nombre del string B
-    - posicionNombre: Posicion de 'Damian' en el string D
-    - arregloParseado: Arreglo formado a partir del string A
+tamanioA = stringA.length;
 
-    Reemplazar este comentario con su codigo.
- */
+for(let i = 0; i < stringA.length; i++) {
+    if(stringA[i].toLowerCase() === 'r') {
+        cantidadLetraR ++;
+    }
+}
+
+nombreCompleto = stringB.concat(" ").concat(stringC);
+fraseOtroNombre = stringD.replace(stringC, stringB);
+posicionNombre = stringD.indexOf('Damian');
+arregloParseado = stringA.split(",");
 
 console.log(tamanioA);
 console.log(cantidadLetraR);
