@@ -1,0 +1,26 @@
+{
+  "name": "nodebasicapi",
+  "version": "1.0.0",
+  "description": "Node practice using express",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carrizosan/SkillFactory-Avalith.git"
+  },
+  "author": "Santiago Carrizo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carrizosan/SkillFactory-Avalith/issues"
+  },
+  "homepage": "https://github.com/carrizosan/SkillFactory-Avalith#readme",
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
