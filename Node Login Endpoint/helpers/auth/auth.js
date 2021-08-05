@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../../config/key");
+const { SECRET_KEY } = require("../../config/config");
 /**
  * Authentication middleware
  * Verify the user token

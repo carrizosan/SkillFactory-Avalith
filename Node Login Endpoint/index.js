@@ -2,9 +2,8 @@ const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
 const bCrypt = require("bcrypt");
-const PORT = 3000;
 const { users } = require("./database/users");
-const { SECRET_KEY } = require("./config/key");
+const { SECRET_KEY, PORT } = require("./config/config");
 const { authUser } = require("./helpers/auth/auth");
 
 app.use(express.json());
@@ -15,6 +14,10 @@ app.use(
   })
 );
 
+/**
+ * Login POST endpoint
+ * Verify username and password and gives access token
+ */
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -44,6 +47,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
+/**
+ * Hello POST endpoint
+ * Send a message to the user identifying the username with the middleware.
+ */
 app.post("/hello", authUser, (req, res) => {
   res.send(`Welcome ${req.user.username}`);
 });
