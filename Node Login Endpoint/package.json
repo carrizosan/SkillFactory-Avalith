@@ -1,0 +1,20 @@
+{
+  "name": "node-login-endpoint",
+  "version": "1.0.0",
+  "description": "Login simple endpoint using JWT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Santiago Carrizo",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
