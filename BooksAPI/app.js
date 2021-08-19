@@ -10,5 +10,6 @@ db.initialize();
 
 // Express Routes
 app.use("/api", require("./routes/books"));
+app.use("/api", require("./routes/authors"));
 
 module.exports = { app, port };

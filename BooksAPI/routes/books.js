@@ -4,64 +4,25 @@ const { mySQLConnection: db } = require("../database/initializeDatabase");
 const { validationResult } = require("express-validator");
 const { booksValidation } = require("../validations/books");
 
-// Create Book
+/**
+ * Create book endpoint
+ */
 router.post("/books", booksValidation, (req, res) => {
-  const { name, author, isbn } = req.body;
+  const { name, authorId, isbn } = req.body;
 
-  // Check validations
+  // Check request body validations
   const validations = validationResult(req);
 
   if (!validations.isEmpty()) {
     return res.status(400).json({
       success: false,
-      msg: "Validations errors",
+      message: "Validations errors",
       error: validations.array(),
     });
   }
 
-  const newBook = { name, author, isbn };
-
-  db.query("INSERT INTO books SET ?", newBook, (error, results) => {
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        message: "There is an error",
-        response: {},
-      });
-    }
-
-    return res.status(201).json({
-      success: true,
-      message: "Book created",
-      response: { id: results.insertId, ...newBook },
-    });
-  });
-});
-
-// Get all books
-router.get("/books", (req, res) => {
-  db.query("SELECT id, name, author, isbn FROM books ORDER BY name", (error, results) => {
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        message: "There is an error",
-        response: {},
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Books list",
-      response: results,
-    });
-  });
-});
-
-// Get one book by Id
-router.get("/books/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.query("SELECT id, name, author, isbn FROM books WHERE id = ?", [id], (error, results) => {
+  // Check if author exists
+  db.query("SELECT id FROM author WHERE id = ?", [authorId], (error, results) => {
     if (error) {
       return res.status(400).json({
         success: false,
@@ -73,37 +34,39 @@ router.get("/books/:id", (req, res) => {
     if (!results[0]) {
       return res.status(404).json({
         success: false,
-        message: "Book not found",
+        message: "Author not found",
         response: {},
       });
     }
-    return res.status(200).json({
-      success: true,
-      message: "Book",
-      response: results[0],
+
+    // Create new book
+    const newBook = { name, author_id: authorId, isbn };
+
+    db.query("INSERT INTO books SET ?", newBook, (error, results) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: "There is an error",
+          response: {},
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: "Book created",
+        response: { id: results.insertId, ...newBook },
+      });
     });
   });
 });
 
-// Modify a book
-router.put("/books/:id", booksValidation, (req, res) => {
-  const { id } = req.params;
-  const { name, author, isbn } = req.body;
-
-  // Check validations
-  const validations = validationResult(req);
-
-  if (!validations.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      msg: "Validations errors",
-      error: validations.array(),
-    });
-  }
-
+/**
+ * Get all books endpoint
+ */
+router.get("/books", (req, res) => {
+  let response = [];
   db.query(
-    "UPDATE books SET name = ?, author = ?, isbn = ? WHERE id = ? ",
-    [name, author, isbn, id],
+    "SELECT b.id 'id', b.name 'name', isbn, author_id, a.name 'author', country FROM books b INNER JOIN author a ON b.id = a.id ORDER BY name",
     (error, results) => {
       if (error) {
         return res.status(400).json({
@@ -113,23 +76,145 @@ router.put("/books/:id", booksValidation, (req, res) => {
         });
       }
 
-      if (results.affectedRows === 0) {
+      // Format the response object
+      results.forEach((book) => {
+        response.push({
+          id: book.id,
+          name: book.name,
+          isbn: book.isbn,
+          author: {
+            id: book.author_id,
+            name: book.author,
+            country: book.country,
+          },
+        });
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Books list",
+        response,
+      });
+    }
+  );
+});
+
+/**
+ * Get by Id endpoint
+ */
+router.get("/books/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    "SELECT b.id 'id', b.name 'name', isbn, author_id, a.name 'author', country FROM books b INNER JOIN author a ON b.id = a.id WHERE b.id = ?",
+    [id],
+    (error, results) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: "There is an error",
+          response: {},
+        });
+      }
+
+      if (!results[0]) {
         return res.status(404).json({
           success: false,
           message: "Book not found",
           response: {},
         });
       }
+
+      // Format response object
+      const response = {
+        id: results[0].id,
+        name: results[0].name,
+        isbn: results[0].isbn,
+        author: {
+          id: results[0].author_id,
+          name: results[0].author,
+          country: results[0].country,
+        },
+      };
+
       return res.status(200).json({
         success: true,
-        message: "Book updated",
-        response: { id, name, author, isbn },
+        message: "Book",
+        response,
       });
     }
   );
 });
 
-// Delete a book
+/**
+ * Update book endpoint
+ */
+router.put("/books/:id", booksValidation, (req, res) => {
+  const { id } = req.params;
+  const { name, authorId, isbn } = req.body;
+
+  // Check validations
+  const validations = validationResult(req);
+
+  if (!validations.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: "Validations errors",
+      error: validations.array(),
+    });
+  }
+
+  // Check if author exists
+  db.query("SELECT id FROM author WHERE id = ?", [authorId], (error, results) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "There is an error",
+        response: {},
+      });
+    }
+
+    if (!results[0]) {
+      return res.status(404).json({
+        success: false,
+        message: "Author not found",
+        response: {},
+      });
+    }
+
+    // Execute update
+    db.query(
+      "UPDATE books SET name = ?, author_id = ?, isbn = ? WHERE id = ? ",
+      [name, authorId, isbn, id],
+      (error, results) => {
+        if (error) {
+          return res.status(400).json({
+            success: false,
+            message: "There is an error",
+            response: {},
+          });
+        }
+
+        if (results.affectedRows === 0) {
+          return res.status(404).json({
+            success: false,
+            message: "Book not found",
+            response: {},
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: "Book updated",
+          response: { id, name, authorId, isbn },
+        });
+      }
+    );
+  });
+});
+
+/**
+ * Delete book endpoint
+ */
 router.delete("/books/:id", (req, res) => {
   const { id } = req.params;
 
