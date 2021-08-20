@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-const Toggle = ({ text, handleSetProducts }) => {
+const Toggle = ({ text, handleSetToggle }) => {
   const [checked, setChecked] = useState(true);
 
   const handleToggle = (e) => {
     const { checked } = e.target;
     setChecked(checked);
-    handleSetProducts(checked);
+    handleSetToggle(checked);
   };
 
   return (
@@ -20,7 +20,7 @@ const Toggle = ({ text, handleSetProducts }) => {
 
 Toggle.propTypes = {
   text: PropTypes.string,
-  handleSetProducts: PropTypes.func.isRequired,
+  handleSetToggle: PropTypes.func.isRequired,
 };
 
 export default Toggle;

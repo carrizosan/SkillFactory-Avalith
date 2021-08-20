@@ -1,28 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Product = ({ name, price, description, stock }) => {
-  const stockLabel = stock ? (
-    <div className='product-stock'>En Stock</div>
-  ) : (
-    <div className='product-no-stock'>Sin Stock</div>
-  );
-
+const Product = ({ title, price, description, category, image }) => {
   return (
     <div className='product-container'>
-      <h4 className='product-title'>{name}</h4>
+      <h4 className='product-title'>{title}</h4>
       <p className='product-description'>{description}</p>
+      <img className='product-img' src={image} />
       <p className='product-price'>Precio: $ {price}</p>
-      {stockLabel}
+      <p className='product-category'>{category}</p>
     </div>
   );
 };
 
 Product.propTypes = {
-  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
-  stock: PropTypes.bool.isRequired,
+  category: PropTypes.string.isRequired,
+  image: PropTypes.bool.isRequired,
 };
 
 export default Product;

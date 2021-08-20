@@ -1,25 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Product from "./Product";
-import productsList from "../data/products";
 import "../App.css";
-import Toggle from "./Toggle";
 
-const Catalog = () => {
-  const [products, setProducts] = useState(productsList);
-
-  const handleSetProducts = (isToggleChecked) => {
-    if (isToggleChecked) {
-      setProducts(productsList);
-    } else {
-      setProducts(productsList.filter((product) => product.stock));
-    }
-  };
-
+const Catalog = ({ products }) => {
   return (
     <>
       <div className='title-container'>
-        <h1 className='catalog-title'>Catalogo</h1>
+        <h1 className='title'>Catalogo</h1>
         <p className='avalith-dot'>.</p>
       </div>
       <div className='flex-container'>
@@ -27,7 +15,6 @@ const Catalog = () => {
           <Product key={product.id} {...product} />
         ))}
       </div>
-      <Toggle handleSetProducts={handleSetProducts} text='Mostrar productos sin stock' />
     </>
   );
 };
